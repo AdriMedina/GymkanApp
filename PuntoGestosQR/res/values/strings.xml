@@ -3,6 +3,9 @@
 
     <string name="app_name">PuntoGestosQR</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="Titulo">Pantalla principal de la APP</string>
+    <string name="Dibujar">¡Dibuja!</string>
+    <string name="title_activity_actividad_dibuja">ActividadDibuja</string>
+    <string name="DibujaInfo">Pantalla para dibujar los gestos</string>
 
 </resources>
