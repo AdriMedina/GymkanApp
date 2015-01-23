@@ -48,6 +48,15 @@ public class Gesto extends View implements OnTouchListener{
     float x_inicial, y_inicial, x_actual, y_actual, check_pointX, check_pointY;
     boolean fin_dibujo = false;
     boolean gesto_correcto = true;
+    
+    /*
+     *	Fase de detección del gesto. Al detectar el gesto " L " hay dos fases claramente
+     *	diferenciadas. La fase en la que realizamos un scroll vertical y la fase en la
+     *	que realizamos el scroll horizontal para dibujar la " L ".
+     *	Definimos la fase 0 como la fase en la que se realiza el scroll vertical y la
+     *	fase 1 como en la que se realiza el scroll horizontal.
+     */
+    int fase = 0;
 
     /*
      * Constructor de la clase en el que indicamos que puede ser foco
@@ -126,6 +135,10 @@ public class Gesto extends View implements OnTouchListener{
     			 */
     			gesto_correcto = true;
     			/*
+    			 * 	Indicamos la fase de detección actual.
+    			 */
+    			fase=0;
+    			/*
     			 * Salida por pantalla de las coordenadas.
     			 */
     			Log.d(TAG1,"Punto inicial: " + x_inicial + " - " + y_inicial);
@@ -141,6 +154,32 @@ public class Gesto extends View implements OnTouchListener{
     			 */
     			x_actual = evento.getX(evento.getPointerId(0));
     			y_actual = evento.getY(evento.getPointerId(0));
+    			
+    			if(fase == 2 && gesto_correcto && (x_actual + 25 < x_inicial ||
+       				y_actual + 50 < y_inicial || y_actual - 50 > y_inicial ) )
+    				gesto_correcto = false;
+    			
+    			//*
+    			if(fase == 1 && gesto_correcto && y_actual > y_inicial &&  x_actual + 50 < x_inicial)
+    				gesto_correcto = false;
+    			
+    			if(fase == 1 && gesto_correcto  && x_actual - 50 > x_inicial)
+    			{
+    				fase = 2;
+    				y_inicial = y_actual;
+    				x_inicial = x_actual;
+    			}
+    			
+    				
+    			if(fase == 0 && gesto_correcto && (y_actual + 25 < y_inicial || 
+    				x_actual + 50 < x_inicial || x_actual - 50 > x_inicial))
+    				gesto_correcto = false;
+    			
+    			if(fase == 0 && gesto_correcto && y_actual > y_inicial+250)
+    				fase = 1;
+    			
+    			Log.d(TAG1, "Fase " + fase + " gesto: " + gesto_correcto);
+    			
     			/*
     			 *	Por motivos de eficiencia se dibuja solo cuando el dedo se ha
     			 *	movido por lo menos 20 pixels en cualquier dirección para no
@@ -166,7 +205,7 @@ public class Gesto extends View implements OnTouchListener{
 	    			/*
 	    			 * Salida por pantalla del punto recogido.
 	    			 */
-	    			Log.d(TAG, "point: " + point);
+	    			Log.d(TAG, "point: " + point );
     			}
     		
     			break;
@@ -176,12 +215,15 @@ public class Gesto extends View implements OnTouchListener{
     		 *	con el dedo:
     		 */
     		case(MotionEvent.ACTION_UP):
+    			if(fase == 2 && gesto_correcto && x_actual > x_inicial + 100 && x_actual < x_inicial + 250 )
+    				fase = 3;
+
     			//view.setBackgroundColor(getResources().getColor(R.color.fondo_gris));
     			/*
     			 * Si lo recopilado por el caso "MotionEvent.ACTION_MOVE" determina que
     			 * el gesto no ha sido correcto:
     			 */
-    			if(!gesto_correcto)
+    			if(!gesto_correcto || fase != 3)
     			{
     				/*
     				 * Pintamos los puntos con la pintura roja.
