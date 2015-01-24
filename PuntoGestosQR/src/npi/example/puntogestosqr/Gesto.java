@@ -10,9 +10,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,15 +44,14 @@ public class Gesto extends View implements OnTouchListener{
      *  gesto.
      */
     float x_inicial, y_inicial, x_actual, y_actual, check_pointX, check_pointY;
-    boolean fin_dibujo = false;
-    boolean gesto_correcto = true;
     
     /*
-     *	Fase de detección del gesto. Al detectar el gesto " L " hay dos fases claramente
-     *	diferenciadas. La fase en la que realizamos un scroll vertical y la fase en la
-     *	que realizamos el scroll horizontal para dibujar la " L ".
-     *	Definimos la fase 0 como la fase en la que se realiza el scroll vertical y la
-     *	fase 1 como en la que se realiza el scroll horizontal.
+     *	Fase de detección del gesto. Al detectar el gesto " L " hay 3 fases claramente
+     *	diferenciadas.
+     *	Definimos la fase 0 como la fase en la que se realiza el scroll vertical, la
+     *	fase 1 como la fase en la que el usuario deja de hacer scroll vertial y comienza
+     *	a realizar el scroll horizontal y la fase 2 que no servirá para comprobar la
+     *	validez de ese scroll horizontal.
      */
     int fase = 0;
 
@@ -131,10 +128,6 @@ public class Gesto extends View implements OnTouchListener{
     			x_inicial = check_pointX = evento.getX(evento.getPointerId(0));
     			y_inicial = check_pointY = evento.getY(evento.getPointerId(0));
     			/*
-    			 *	Como se trata de un nuevo gesto, lo consideramos correcto de inicio.
-    			 */
-    			gesto_correcto = true;
-    			/*
     			 * 	Indicamos la fase de detección actual.
     			 */
     			fase=0;
@@ -154,31 +147,81 @@ public class Gesto extends View implements OnTouchListener{
     			 */
     			x_actual = evento.getX(evento.getPointerId(0));
     			y_actual = evento.getY(evento.getPointerId(0));
-    			
-    			if(fase == 2 && gesto_correcto && (x_actual + 25 < x_inicial ||
-       				y_actual + 50 < y_inicial || y_actual - 50 > y_inicial ) )
-    				gesto_correcto = false;
-    			
-    			//*
-    			if(fase == 1 && gesto_correcto && y_actual > y_inicial &&  x_actual + 50 < x_inicial)
-    				gesto_correcto = false;
-    			
-    			if(fase == 1 && gesto_correcto  && x_actual - 50 > x_inicial)
+    			/*
+    			 * Según los valores recogidos de la posición actual
+    			 * se analizan con respecto a la posición inicial.
+    			 */
+    			switch (fase)
     			{
-    				fase = 2;
-    				y_inicial = y_actual;
-    				x_inicial = x_actual;
+    				/*
+    				 * Fase 0: Detección del scroll vertical hacia abajo.
+    				 */
+    				case 0:
+    	    			/*
+    	    			 * Este bloque 'if' controla que no se realicen las siguientes acciones:
+    	    			 * 	-El scroll sea hacia arriba.
+    	    			 * 	-El scroll vertical no se desvíe a la izquierda o derecha dentro
+    	    			 *	de un rango de 50 pixels.
+    	    			 *
+    	    			 * Si alguna de estas cosas sucede, marcaremos el gesto como incorrecto
+    	    			 * introduciéndolo en la fase de error -1.
+    	    			 */
+    					if(y_actual + 25 < y_inicial || x_actual + 50 < x_inicial || x_actual - 50 > x_inicial)
+    	    				fase = -1;
+    					/*
+    					 * Este bloque 'if' comprueba que, si scroll vertical está siendo correcto
+    					 * y ha alcanzado una longitud como mínimo de 250 pixels, pasamos a la fase 1.
+    					 */
+    					if(y_actual > y_inicial+250)
+    	    				fase = 1;
+    					
+    					break;
+    				/*
+    				 * Fase 1: El scroll vertical ha sido correcto y ha alcanzado el mínimo de longitud
+    				 * establecida en la fase 0 (250 pixels). Sin embargo el usuario puede seguir
+    				 * con el scroll vertical hasta cuando le convenga y el gesto sería igualmente
+    				 * correcto. Es por esto que esta fase se encarga de controlar cuándo el usuario ha
+    				 * dejado de hacer scroll vertical para comenzar a hacer el scroll horizontal.
+    				 */
+    				case 1:
+    					/*
+    					 * Si el scroll es hacia arriba o hacia la izquierda entramos en fase de error.
+    					 */
+    					if(y_actual > y_inicial + 250 &&  x_actual + 50 < x_inicial)
+    	    				fase = -1;
+    					
+    					/*
+    					 * Si el scroll avanza 50 pixels hacia la derecha consideramos que el usuario
+    					 * ha comenzado el scroll horizontal. Por tanto pasamos a la fase 2.
+    					 * Actualizamos la posición inicial para comenzar a detectar el scroll horizontal.
+    					 */
+    					if(x_actual - 50 > x_inicial)
+    	    			{
+    	    				fase = 2;
+    	    				y_inicial = y_actual;
+    	    				x_inicial = x_actual;
+    	    			}
+    					
+    					break;
+    				/*
+    				 * Fase 2: Detección del scroll vertical hacia la derecha.	
+    				 */
+    				case 2:
+    					/*
+    					 * Si mientras detectamos el scroll horizontal hacia la derecha el usuario
+    					 * hace un scroll hacia la izquierda o sobrepasa 50 pixels hacia arriba o hacia
+    					 * abajo, enviamos el gesto a la fase de error.
+    					 */
+    					if(x_actual + 25 < x_inicial ||	y_actual + 50 < y_inicial || y_actual - 50 > y_inicial )
+    		    			fase = -1;
+    					
+    					break;
+    					
+    				case -1:
+    					break;
     			}
     			
-    				
-    			if(fase == 0 && gesto_correcto && (y_actual + 25 < y_inicial || 
-    				x_actual + 50 < x_inicial || x_actual - 50 > x_inicial))
-    				gesto_correcto = false;
-    			
-    			if(fase == 0 && gesto_correcto && y_actual > y_inicial+250)
-    				fase = 1;
-    			
-    			Log.d(TAG1, "Fase " + fase + " gesto: " + gesto_correcto);
+    			Log.d(TAG1, "Fase " + fase );
     			
     			/*
     			 *	Por motivos de eficiencia se dibuja solo cuando el dedo se ha
@@ -189,7 +232,8 @@ public class Gesto extends View implements OnTouchListener{
     				check_pointY < y_actual-20 || check_pointY > y_actual+20)
     			{
     				/*
-    				 * Capturamos el punto que será dibujado.
+    				 * Capturamos el punto que será dibujado y actualizamos el nuevo
+    				 * punto de referencia (check_point).
     				 */
     				Point point = new Point();
     				point.x = check_pointX = x_actual;
@@ -215,15 +259,22 @@ public class Gesto extends View implements OnTouchListener{
     		 *	con el dedo:
     		 */
     		case(MotionEvent.ACTION_UP):
-    			if(fase == 2 && gesto_correcto && x_actual > x_inicial + 100 && x_actual < x_inicial + 250 )
+    			/*
+    			 * Si al levantar el dedo el gesto no se encuentra en fase de error, si no que 
+    			 * ha alcanzado la última fase y el scroll horizontal ha tenido una longitud
+    			 * entre 75 y 350 pixels de largo consideramos el gesto concluido satisfactoriamente
+    			 * (fase 3) en caso contrario el gesto se considera incorrecto.
+    			 */
+    			if(fase == 2 && x_actual > x_inicial + 75 && x_actual < x_inicial + 350 )
     				fase = 3;
-
-    			//view.setBackgroundColor(getResources().getColor(R.color.fondo_gris));
+    			else
+    				fase = -1;
+			Log.d(TAG1, "Faseee " + fase );
     			/*
     			 * Si lo recopilado por el caso "MotionEvent.ACTION_MOVE" determina que
     			 * el gesto no ha sido correcto:
     			 */
-    			if(!gesto_correcto || fase != 3)
+    			if(fase == -1)
     			{
     				/*
     				 * Pintamos los puntos con la pintura roja.
@@ -233,9 +284,11 @@ public class Gesto extends View implements OnTouchListener{
     			}
     			break;
     	}
-        // if(event.getAction() != MotionEvent.ACTION_DOWN)
-        //return super.onTouchEvent(evento);
+        /*if(evento.getAction() != MotionEvent.ACTION_DOWN)
+        	return super.onTouchEvent(evento);*/
+       	
         return true;
+
     }
 }
 

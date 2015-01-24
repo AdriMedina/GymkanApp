@@ -37,7 +37,7 @@ public class MainActivity extends Activity{
 		gestoUsuario.requestFocus();		
 	}
 	
-	/*@Override
+	@Override
 	public boolean onTouchEvent(MotionEvent evento)
 	{	
 		// Obtengo la acción que se ha detectado en la pantalla.
@@ -66,7 +66,7 @@ public class MainActivity extends Activity{
 		}
 		
 		return super.onTouchEvent(evento);
-	}*/
+	}
 	
 /*	public void Dibuja(View view){
 		Intent intent = new Intent(MainActivity.this, ActividadDibuja.class);
