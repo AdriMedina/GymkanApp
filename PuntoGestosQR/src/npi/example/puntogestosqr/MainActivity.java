@@ -1,5 +1,7 @@
 package npi.example.puntogestosqr;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -108,11 +110,23 @@ public class MainActivity extends Activity{
 			 */
 			if(resultCode == RESULT_OK)
 			{
+				/*
+				 * Capturamos el string y lo almacenamos en posición.
+				 */
 				String posicion = data.getStringExtra("SCAN_RESULT");
+				/*
+				 * Dividimos el string a partir del caracter "_", por ejemplo:
+				 * "String posicion" contiene : LATITUD_37.19678168548899_LONGITUD_-3.62465459523194
+				 * Tras el 'split' division contendrá:
+				 * "String division = {LATITUD, 37.19678168548899, LONGITUD, -3.62465459523194)"
+				 * Seleccionamos las posiciones 1 y 3 del vector que contienen los valores reales.
+				 */
 				String[] division = posicion.split("_");
 				String latitud = division[1];
 				String longitud = division[3];
 				Log.d(DEBUG_TAG, latitud + longitud);
+
+				
 			}
 			
 			/*if(resultCode == RESULT_CANCELED)
