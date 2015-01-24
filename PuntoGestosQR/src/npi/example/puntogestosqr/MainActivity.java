@@ -32,6 +32,7 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		gestoUsuario = new Gesto(this);
 		setContentView(gestoUsuario);
 		gestoUsuario.requestFocus();		
@@ -39,33 +40,15 @@ public class MainActivity extends Activity{
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent evento)
-	{	
-		// Obtengo la acción que se ha detectado en la pantalla.
-		int accion = MotionEventCompat.getActionMasked(evento);
-				
-		// Referencio el fondo de la aplicación en un objeto tipo View.
-		View vista_actual = findViewById(R.id.fondo);
+	{				
+		//Referencio el fondo de la aplicación en un objeto tipo View.
+		//View vista_actual = findViewById(R.id.fondo);
+		//vista_actual.setBackgroundColor(getResources().getColor(R.color.pintura_roja));
 		
-		switch(accion){
-			case(MotionEvent.ACTION_DOWN):
-				x_inicial = x_actual = evento.getX(evento.getPointerId(0));
-				y_inicial = y_actual = evento.getY(evento.getPointerId(0));
-				correcto = true;
-				break;
-			case(MotionEvent.ACTION_MOVE):
-				//Si varía la posición más de 5 pixels...
-				if( x_actual < evento.getX(evento.getPointerId(0))-5 ||
-					x_actual > evento.getX(evento.getPointerId(0))+5 ||
-					y_actual < evento.getY(evento.getPointerId(0))-5 ||
-					y_actual > evento.getY(evento.getPointerId(0))+5)
-				{
-					x_actual = evento.getX(evento.getPointerId(0));
-					y_actual = evento.getY(evento.getPointerId(0));
-				}
-			//case(MotionEvent.ACTION_UP):
-		}
 		
-		return super.onTouchEvent(evento);
+		
+		
+		return true;
 	}
 	
 /*	public void Dibuja(View view){
