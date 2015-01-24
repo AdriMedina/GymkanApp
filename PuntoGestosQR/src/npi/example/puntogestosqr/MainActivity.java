@@ -109,7 +109,10 @@ public class MainActivity extends Activity{
 			if(resultCode == RESULT_OK)
 			{
 				String posicion = data.getStringExtra("SCAN_RESULT");
-				Log.d(DEBUG_TAG, posicion);
+				String[] division = posicion.split("_");
+				String latitud = division[1];
+				String longitud = division[3];
+				Log.d(DEBUG_TAG, latitud + longitud);
 			}
 			
 			/*if(resultCode == RESULT_CANCELED)
