@@ -221,7 +221,7 @@ public class Gesto extends View implements OnTouchListener{
     					break;
     			}
     			
-    			Log.d(TAG1, "Fase " + fase );
+    			//Log.d(TAG1, "Fase " + fase );
     			
     			/*
     			 *	Por motivos de eficiencia se dibuja solo cuando el dedo se ha
@@ -269,7 +269,7 @@ public class Gesto extends View implements OnTouchListener{
     				fase = 3;
     			else
     				fase = -1;
-			Log.d(TAG1, "Faseee " + fase );
+			//Log.d(TAG1, "Faseee " + fase );
     			/*
     			 * Si lo recopilado por el caso "MotionEvent.ACTION_MOVE" determina que
     			 * el gesto no ha sido correcto:
@@ -284,11 +284,15 @@ public class Gesto extends View implements OnTouchListener{
     			}
     			break;
     	}
-        /*if(evento.getAction() != MotionEvent.ACTION_DOWN)
-        	return super.onTouchEvent(evento);*/
-       	
-        return true;
-
+       	/*
+       	 * Cuando termina el gesto (ACTION_UP) devolvemos la información 
+       	 * recogida a la actividad principal. En particular solo nos interesa
+       	 * saber la 'fase' en la que terminó el gesto.
+       	 */
+       	if(evento.getActionMasked() == MotionEvent.ACTION_UP)
+       		return super.onTouchEvent(evento);
+        
+       	return true;
     }
 }
 
