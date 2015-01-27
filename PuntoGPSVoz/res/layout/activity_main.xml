@@ -77,4 +77,16 @@
          android:text="@string/texto_boton_ayuda"
          android:onClick="ayuda" />
 
+     <TextView
+         android:id="@+id/display_correcto"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/displayLongitud"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="90dp"
+         android:text="@string/texto_correcto"
+         android:textColor="@color/pintura_azul"
+         android:visibility="invisible"
+         android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

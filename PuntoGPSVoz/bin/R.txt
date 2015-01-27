@@ -352,7 +352,7 @@ int id action_mode_close_button 0x7f090020
 int id activity_chooser_view_content 0x7f090021
 int id always 0x7f090014
 int id beginning 0x7f09001b
-int id button1 0x7f090045
+int id boton_ayuda 0x7f090045
 int id checkbox 0x7f090029
 int id collapseActionView 0x7f090015
 int id decor_content_parent 0x7f09002f
@@ -361,6 +361,7 @@ int id dialog 0x7f090019
 int id disableHome 0x7f09000d
 int id displayLatitud 0x7f090041
 int id displayLongitud 0x7f090043
+int id display_correcto 0x7f090046
 int id dropdown 0x7f09001a
 int id edit_query 0x7f090033
 int id end 0x7f09001c
@@ -378,7 +379,7 @@ int id middle 0x7f09001d
 int id never 0x7f090017
 int id none 0x7f09000f
 int id normal 0x7f09000b
-int id panel_ayuda 0x7f090046
+int id panel_ayuda 0x7f090047
 int id progress_circular 0x7f090007
 int id progress_horizontal 0x7f090008
 int id radio 0x7f09002b
@@ -451,10 +452,12 @@ int string abc_shareactionprovider_share_with 0x7f0a000f
 int string abc_shareactionprovider_share_with_application 0x7f0a000e
 int string abc_toolbar_collapse_description 0x7f0a0004
 int string app_name 0x7f0a0010
-int string ayuda 0x7f0a0015
+int string ayuda 0x7f0a0017
 int string boton_hablar 0x7f0a0014
 int string display_latitud 0x7f0a0011
 int string display_longitud 0x7f0a0012
+int string texto_boton_ayuda 0x7f0a0015
+int string texto_correcto 0x7f0a0016
 int string valor_defecto 0x7f0a0013
 int style AppBaseTheme 0x7f0b00eb
 int style AppTheme 0x7f0b00ec
