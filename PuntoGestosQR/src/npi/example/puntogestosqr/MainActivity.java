@@ -10,24 +10,14 @@ import android.view.View;
 import android.widget.TextView;
 
 
-// Librerias para realizar los gestos
-/*import android.gesture.Gesture;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureOverlayView;
-import android.gesture.Prediction;*/
-
-
 public class MainActivity extends Activity{
 	
 	//Etiquetas para la salida de datos.
 	private static final String DEBUG_TAG = "Fase";
-	@SuppressWarnings("unused")
-	private static final String COORD_TAG = "Coordenadas";
 	
+	//String donde se almacenará la información recogida con el detector de gestos QR.
 	String posicion;
-	 public final static String EXTRA_MESSAGE = "posicion";
-	
+		
 	//Variables necesarias para comprobar gestos.
 	float x_inicial, y_inicial, x_actual, y_actual, y_final;
 	boolean correcto = true;
@@ -76,7 +66,10 @@ public class MainActivity extends Activity{
 			{
 				Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-				
+				/*
+				 * Empezamos la actividad con el Intent definido anteriormente y con
+				 * código de solicitud = 0. El código servirá para identificar 
+				 */
 				startActivityForResult(intent, 0);
 			}
 			/*
@@ -117,7 +110,7 @@ public class MainActivity extends Activity{
 				 */
 				posicion = data.getStringExtra("SCAN_RESULT");
 				/*
-				 * Llamamos a la función GPS con los datos recogidos.
+				 * Llamamos a la función que mostará los resuldatos obtenidos.
 				 */
 				MostrarResultados();
 	
@@ -126,18 +119,31 @@ public class MainActivity extends Activity{
 	}
 	
 	/*
-	 * Función que recibe los datos del código QR e invoca a Google Maps con la
-	 * posicion correspondiente.
+	 * Función que muestra por patantalla los datos obtenidos por el escaner QR.
 	 */
 	public void MostrarResultados()
 	{
+		/*
+		 * Muestro el layout que tiene los display para mostrar las coordenadas
+		 * recogidas.
+		 */
 		setContentView(R.layout.activity_main);
 
 		if(posicion.contains("LATITUD") && posicion.contains("LONGITUD"))
 		{
+			/*
+			 * Descomponemos es String que contiene los datos de manera que el String division
+			 * queda de la siguiente manera:
+			 * 
+			 * 		division ={	LATITUD,	30.543...(datos),	LONGITUD,	-3.753...(longitud)};
+			 * 						[0]				[1]				[2]				[3] 
+			 */
 			String[] division = posicion.split("_");
 
-			
+			/*
+			 * Enseñamos las componentes de "division" que nos iteresan (1 y 3) en el display
+			 * correspondiente.
+			 */
 			TextView display = (TextView) findViewById(R.id.displayLatitud);
 			
 			display.setText(division[1]);
@@ -146,6 +152,23 @@ public class MainActivity extends Activity{
 			
 			display.setText(division[3]);
 		}
+		
+		/*
+		 * Mientras se muestra la información en los correspondientes displays, fijamos el fondo como
+		 * un "OnClickListener" a la espera de que se toque la pantalla.
+		 */
+		final View fondo = (View) findViewById(R.id.fondo);
+		fondo.setOnClickListener(new View.OnClickListener() {
+			/*
+			 * Cuando se toca la panatalla, se le devuelve el focus al objeto "gesto usuario" por si se
+			 * desea capturar un nuevo código QR tras hacer el gesto de nuevo. 
+			 */
+			@Override
+			public void onClick(View v) {
+				setContentView(gestoUsuario);
+				gestoUsuario.requestFocus();
+			}
+		});	
 	}
 }
 
