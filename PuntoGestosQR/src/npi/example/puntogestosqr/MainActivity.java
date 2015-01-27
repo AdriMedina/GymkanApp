@@ -1,3 +1,6 @@
+/*
+ * Detecta gesto en "L".
+ */
 package npi.example.puntogestosqr;
 
 import android.app.Activity;
