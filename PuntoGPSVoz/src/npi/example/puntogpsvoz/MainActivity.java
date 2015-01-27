@@ -189,6 +189,7 @@ public class MainActivity extends Activity {
     	else
     	{
     		/*
+    		 * 
     		 * Si el usuario quiere introducir un valor de latitud, elminamos la palabra de la lista
     		 * y modificamos el estado para introducir el valor en el campo correcto.
     		 */
