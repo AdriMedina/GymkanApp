@@ -26,61 +26,63 @@ import android.widget.Toast;
 public class ActividadBrujula extends Activity implements SensorEventListener {
 
 	// TextViews
-    private TextView direccion;
+
     private TextView infoSeleccionado;
 
-    // Initialize ImageView
-    private ImageView image;
-
-    // Degrees
-    private float currentDegree = 0.0f;
-    private float lastDegree = 0.0f;
+    // Objeto de la clase ImageView
+    private ImageView imagenBrujula;
+    private ImageView imagenFlecha;
+    
+    // Variables para controlar los grados de la brujula
+    private float actualGrado = 0.0f;
+    private float ultimoGrado = 0.0f;
     private float gradoMin;
     private float gradoMax;
 
-    
+    // Variables que contienen el elemento seleccionado del spinner
     private int posicionSeleccionado;
+    private String cardinalSeleccionado;
     
-    
-    // Sensors and location
+    // Objeto de la clase SensorManager para cargar la brujula
     private SensorManager mSensorManager;
-	private String cardinalSeleccionado;
-	
-	
+
 	// Variables de la camara
 	private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 	public static final int MEDIA_TYPE_IMAGE = 1;
-    private static final String IMAGE_DIRECTORY_NAME = "Hello Camera";
     private Uri fileUri;
     private ImageView imgPreview;
     private int nVeces = 0;
-    private TextView infoFotografia;
+
 	
-	
+    /**
+	 * Método que se inicia al crear la actividad.
+	 * Dentro de él, inicializamos todos los objetos y variables que nos harán falta. 
+	 * Obtiene los valores seleccionados del spinner a traves del Intent en la actividad principal y 
+	 * llama a la función buscaCardinalSeleccinado.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_actividad_brujula);
 		
-		 // Fill the image with the compass
-        image = (ImageView) findViewById(R.id.imageViewCompass);
-
-        // Set other texts
-        direccion = (TextView) findViewById(R.id.tv_direccion);
-        infoSeleccionado = (TextView) findViewById(R.id.tv_info_seleccionado);
-        infoFotografia = (TextView) findViewById(R.id.tv_info_fotografia);
+        imagenBrujula = (ImageView) findViewById(R.id.imagenBrujula);
+        imagenFlecha = (ImageView) findViewById(R.id.imagenFlecha);
         
-        // Initialize sensors
+        infoSeleccionado = (TextView) findViewById(R.id.tv_info_seleccionado);
+
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         
         cardinalSeleccionado = getIntent().getExtras().getString("seleccion");
         posicionSeleccionado = getIntent().getExtras().getInt("posicion");
         
         buscaCardinalSeleccionado();
-        
-        
 	}
 
+	/**
+     * Método que se activa cuando el usuario va a interactuar con la aplicación.
+     * 
+     * Instancia el sensor a utilizar, en este caso, la brujula.
+     */
 	@Override
     protected void onResume() {
         super.onResume();
@@ -91,7 +93,9 @@ public class ActividadBrujula extends Activity implements SensorEventListener {
     }
 
     /**
-     * Method called when the app pauses his activity
+     * Método llamado cuando se pausa la actividad.
+     * 
+     * Se detiene el registro de los valores de la brujula
      */
     @Override
     protected void onPause() {
@@ -101,163 +105,160 @@ public class ActividadBrujula extends Activity implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 	
+    /**
+	 * Método necesario cuando se implementa SensorEventListener y que se llama cada vez que cambian los valores. 
+	 * 
+	 * Obtenemos el valor del grado actual de la brujula.
+	 * 
+	 * Es necesario separar la comprobación del punto cardinal "Norte" del resto, ya que no podemos
+	 * medirlo igual para crear un rango de posibilidad en la que se puede encontrar de la misma manera 
+	 * que el resto de puntos cardinales.
+	 * 
+	 * Creamos la animación de la brujula y la giramos según el valor del grado y el anterior
+	 * 
+	 */
     @Override
     public void onSensorChanged(SensorEvent event) {
     	
-        // Get the degree
-        lastDegree = Math.round(event.values[0]);
+        // Conseguimos el valor del grado de la brujula
+        ultimoGrado = Math.round(event.values[0]);
 
-        // Say if we must turn left or right to go north
-        
+        // Si el punto cardinal NO es el norte ...
         if(posicionSeleccionado != 0){
-	        if (lastDegree > gradoMin && lastDegree < gradoMax) {
-	        	direccion.setText("Flecha verde");
+        	// Comprobamos que la brujula se encuentre dentro del rango permitido apuntando resto de puntos cardinales
+	        if (ultimoGrado > gradoMin && ultimoGrado < gradoMax) {
+	        	imagenFlecha.setImageResource(R.drawable.flecha_verde);
 	        	
-	        	// Controlamos que solo entre la primera vez para tirar la foto
+	        	// Controlamos que lance solo una fotografia cada vez que apunta
 	        	nVeces++;
 	        	if(nVeces == 1){
-	        		
-	        		infoFotografia.setText("Tomando fotografia en 3 ... 2 ... 1 ...");
-	        		
-	        		captureImage();
+	        		capturarImagen();
+	        		Toast.makeText(getApplicationContext(), 
+	        				"Tomando fotografia.. No mueva la cámara", Toast.LENGTH_SHORT).show();
 	        	}
 	        } else {
-	        	direccion.setText("Flecha roja");
-	        	infoFotografia.setText("Esperando");
+	        	
+	        	imagenFlecha.setImageResource(R.drawable.flecha_roja);
 	        	nVeces = 0;
 	        }
+	    // Si el punto cardinal SI es el norte ...
         }else{
-        	if ((lastDegree > gradoMin && lastDegree <= 359) || (lastDegree >= 0 && lastDegree < gradoMax)) {
-        		direccion.setText("Flecha verde");
-	        	
-	        	// Controlamos que solo entre la primera vez para tirar la foto
+        	// Comprobamos que la brujula se encuentre dentro del rango permitido apuntando al norte
+        	if ((ultimoGrado > gradoMin && ultimoGrado <= 359) || (ultimoGrado >= 0 && ultimoGrado < gradoMax)) {
+        		imagenFlecha.setImageResource(R.drawable.flecha_verde);
+        		
+	        	// Controlamos que lance solo una fotografia cada vez que apunta
 	        	nVeces++;
 	        	if(nVeces == 1){
-	        		
-	        		infoFotografia.setText("Tomando fotografia en 3 ... 2 ... 1 ...");
-	        		
-	        		captureImage();
+	        		capturarImagen();
+	        		Toast.makeText(getApplicationContext(), 
+	        				"Tomando fotografia.. No mueva la cámara", Toast.LENGTH_SHORT).show();
 	        	}
 	        } else {
-	        	direccion.setText("Flecha roja");
-	        	infoFotografia.setText("Esperando");
+	        	imagenFlecha.setImageResource(R.drawable.flecha_roja);
 	        	nVeces = 0;
 	        }
         }
-        // Create and exetute rotation animation
-        RotateAnimation rotation;
-        rotation = new RotateAnimation(
-                currentDegree,
-                -lastDegree,
+        
+        // Creamos y ejecutamos la animación de la brujula
+        RotateAnimation imRotacion;
+        imRotacion = new RotateAnimation(
+                actualGrado,
+                -ultimoGrado,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
+        imRotacion.setDuration(300);
+        imRotacion.setFillAfter(true);
+        imagenBrujula.startAnimation(imRotacion);
 
-        rotation.setDuration(300);
-        rotation.setFillAfter(true);
-        image.startAnimation(rotation);
-
-        // Update current degree
-        currentDegree = -lastDegree;
-
-
+        // Actualizamos los grados
+        actualGrado = -ultimoGrado;
     }
 
-
+    /**
+	 * Método necesario cuando se implementa SensorEventListener
+	 */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
-    
+    /**
+     * Función que asigna el rango según el punto cardinal seleccionado en el spinner
+     */
     public void buscaCardinalSeleccionado(){
-
     	infoSeleccionado.setText("Estoy buscando el " + cardinalSeleccionado);
-    	
     	switch (posicionSeleccionado) {
 	    	// Norte
 			case 0:
 				gradoMin = 345; gradoMax = 15;
-				break;
-				
+				break;		
 			// Sur
 			case 1:
 				gradoMin = 165; gradoMax = 195;
 				break;
-				
 			// Oeste
 			case 2:
 				gradoMin = 255; gradoMax = 285;
 				break;
-				
 			// Este
 			case 3:
 				gradoMin = 75; gradoMax = 105;
 				break;
-				
 			default:
 				break;
 		}
     }
     
-    
-    private void captureImage() {
+    /**
+     * Función que inicia la cámara para capturar la foto
+     */
+    private void capturarImagen() {
     	// Dar un nombre a la fotografía para almacenarla en la carpeta por defecto del movil
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String formatoFecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     	
     	ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "IMG_" + timeStamp + ".jpg");
+        values.put(MediaStore.Images.Media.TITLE, "IMG_" + formatoFecha + ".jpg");
  
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-     
-        //fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-        fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values); // store content values
-        
+        fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);    
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
      
-        // start el intent" de captura
+        // activa el intent de la captura
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-        
-        
-         
     }
     
-    
+    /**
+     * Método que manda algun resultado a la actividad que la ha invocado
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Comprobar la solicitud del usuario de guardar la fotografía
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                previewCapturedImage();
-                
+                previsualizacionImagenCapturada();  
                 onStop();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(getApplicationContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
+                        "Usuario ha cancelado la captura de imagen", Toast.LENGTH_SHORT)
                         .show();
             } else {
                 Toast.makeText(getApplicationContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+                        "ERROR! Fallo al capturar la imagen", Toast.LENGTH_SHORT)
                         .show();
             }
         }
     }
     
-    
-    private void previewCapturedImage() {
+    /**
+     * Método que muestra una previsualización de la imagen capturada
+     */
+    private void previsualizacionImagenCapturada() {
         try {
- 
             imgPreview.setVisibility(View.VISIBLE);
- 
-            // bimatp factory
             BitmapFactory.Options options = new BitmapFactory.Options();
- 
-            // downsizing image as it throws OutOfMemory Exception for larger
-            // images
             options.inSampleSize = 8;
- 
-            final Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
-                    options);
- 
+            final Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),options);
             imgPreview.setImageBitmap(bitmap);
         } catch (NullPointerException e) {
             e.printStackTrace();

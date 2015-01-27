@@ -9,12 +9,11 @@
     
     <string name="title_activity_actividad_brujula">ActividadBrujula</string>
 	<string name="iv_brujula_info">Rosa de los vientos</string>
+    <string name="descripcionFlecha">Flecha</string>
     
 	<string name="tv_seleccionado">Busco algo</string>
-    <string name="compassDescription">Compass</string>
-    <string name="direccion">Go!</string>
+    <string name="descripcionBrujula">Brujula</string>
     
-    <string name="info_fotografia">Esperando</string>
 	
 	
 </resources>

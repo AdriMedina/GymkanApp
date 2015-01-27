@@ -11,33 +11,25 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
-        android:text="@string/tv_seleccionado" />
+        android:text="@string/tv_seleccionado"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/imageViewCompass"
+        android:id="@+id/imagenBrujula"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/compassDescription"
+        android:contentDescription="@string/descripcionBrujula"
         android:src="@drawable/im_windrose" />
 
-    <TextView
-        android:id="@+id/tv_direccion"
+    <ImageView
+        android:id="@+id/imagenFlecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageViewCompass"
+        android:layout_above="@+id/imagenBrujula"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="@string/direccion" />
-
-    <TextView
-        android:id="@+id/tv_info_fotografia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
-        android:text="@string/info_fotografia" />
-   
+        android:contentDescription="@string/descripcionFlecha"
+        android:src="@drawable/flecha_roja" />
+    
 </RelativeLayout>

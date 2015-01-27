@@ -24,7 +24,12 @@ public class MainActivity extends Activity implements SensorEventListener{
 	private SoundPool sndPool;
 	private int explo, guita, mune, pist, timb, vient;
 	
-	
+	/**
+	 * Método que se inicia al crea la actividad principal. 
+	 * Dentro de él, instanciamos el objeto SoundPool, 
+	 * encargado de manejar los clips de los sonidos, y cargamos
+	 * los sonidos. 
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +48,13 @@ public class MainActivity extends Activity implements SensorEventListener{
    	  	vient = sndPool.load(pContext, R.raw.viento, 1);
     }
     
-
+    /**
+     * Método que se activa cuando el usuario va a interactuar con la aplicación.
+     * 
+     * Se encarga de instanciar el sensor Acelerómetro.
+     */
     @Override
-	protected void onResume() {  // registro del listener
+	protected void onResume() {
 		super.onResume(); 
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		
@@ -60,22 +69,35 @@ public class MainActivity extends Activity implements SensorEventListener{
 		}
 	}
 
-	
+	/**
+	 * Método que se ejecuta cuando va a dejar de ser visible y no se va a necesitar durante un tiempo
+	 * 
+	 * Se encarga de cerrar los servicios del acelerómetro y de los clips de sonido
+	 */
 	@Override
-	protected void onStop() { // anular el registro del listener
+	protected void onStop() {
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		sm.unregisterListener(this);
 		sndPool.release();
 		super.onStop();
 	}
 
-	
+	/**
+	 * Método necesario cuando se implementa SensorEventListener
+	 */
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// es llamado cuando la precisión del sensor ha cambiado
 	} 
 
-	
+	/**
+	 * Método necesario cuando se implementa SensorEventListener y que se llama cada vez que cambian los valores. 
+	 * 
+	 * Obtenemos los valores del sensor acelerómetro. Analizamos las distintas posiciones del dispositivo y 
+	 * para cada una asignamos un sonido.
+	 * 
+	 * 
+	 */
 	@Override
 	public void onSensorChanged(SensorEvent event) {  // es llamado cuando los valores del sensor han cambiado
 		synchronized (this) { // sincronizar, para evitar problemas de concurrencia
