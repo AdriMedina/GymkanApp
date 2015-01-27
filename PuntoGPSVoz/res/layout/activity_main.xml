@@ -66,13 +66,15 @@
          android:text="@string/boton_hablar" />
 
      <Button
-         android:id="@+id/button1"
+         android:id="@+id/boton_ayuda"
          style="?android:attr/buttonStyleSmall"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
+         android:layout_alignParentEnd="true"
          android:layout_alignParentRight="true"
          android:layout_alignParentTop="true"
-         android:text="Ayuda."
+         android:textColor="#FFFFFF"
+         android:text="@string/texto_boton_ayuda"
          android:onClick="ayuda" />
 
 </RelativeLayout>

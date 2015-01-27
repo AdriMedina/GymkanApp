@@ -351,7 +351,7 @@ int id action_menu_presenter 0x7f090006
 int id action_mode_bar 0x7f09002e
 int id action_mode_bar_stub 0x7f09002d
 int id action_mode_close_button 0x7f090020
-int id action_settings 0x7f090040
+int id action_settings 0x7f090044
 int id activity_chooser_view_content 0x7f090021
 int id always 0x7f090014
 int id beginning 0x7f09001b
@@ -361,6 +361,8 @@ int id decor_content_parent 0x7f09002f
 int id default_activity_button 0x7f090024
 int id dialog 0x7f090019
 int id disableHome 0x7f09000d
+int id displayLatitud 0x7f090041
+int id displayLongitud 0x7f090043
 int id dropdown 0x7f09001a
 int id edit_query 0x7f090033
 int id end 0x7f09001c
@@ -399,6 +401,8 @@ int id split_action_bar 0x7f090004
 int id submit_area 0x7f09003c
 int id tabMode 0x7f09000c
 int id title 0x7f090027
+int id tituloDisplayLatitud 0x7f090040
+int id tituloDisplayLongitud 0x7f090042
 int id up 0x7f090001
 int id useLogo 0x7f090013
 int id withText 0x7f090018
@@ -428,7 +432,8 @@ int layout abc_search_dropdown_item_icons_2line 0x7f030014
 int layout abc_search_view 0x7f030015
 int layout abc_simple_dropdown_hint 0x7f030016
 int layout activity_main 0x7f030017
-int layout support_simple_spinner_dropdown_item 0x7f030018
+int layout resultados 0x7f030018
+int layout support_simple_spinner_dropdown_item 0x7f030019
 int menu informacion 0x7f0c0000
 int string DibujaInfo 0x7f0a0015
 int string Dibujar 0x7f0a0013
@@ -450,11 +455,14 @@ int string abc_shareactionprovider_share_with_application 0x7f0a000e
 int string abc_toolbar_collapse_description 0x7f0a0004
 int string action_settings 0x7f0a0018
 int string app_name 0x7f0a0010
+int string display_latitud 0x7f0a0019
+int string display_longitud 0x7f0a001a
 int string hello_world 0x7f0a0017
 int string title_activity_actividad_dibuja 0x7f0a0014
 int string title_activity_actividad_informacion 0x7f0a0012
 int string title_activity_informacion 0x7f0a0016
 int string title_activity_main 0x7f0a0011
+int string valor_defecto 0x7f0a001b
 int style AppBaseTheme 0x7f0b00eb
 int style AppTheme 0x7f0b00ec
 int style Base_TextAppearance_AppCompat 0x7f0b0098

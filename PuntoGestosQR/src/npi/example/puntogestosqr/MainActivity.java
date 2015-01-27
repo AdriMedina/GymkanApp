@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
 
 
 // Librerias para realizar los gestos
@@ -24,6 +26,7 @@ public class MainActivity extends Activity{
 	private static final String COORD_TAG = "Coordenadas";
 	
 	String posicion;
+	 public final static String EXTRA_MESSAGE = "posicion";
 	
 	//Variables necesarias para comprobar gestos.
 	float x_inicial, y_inicial, x_actual, y_actual, y_final;
@@ -116,13 +119,9 @@ public class MainActivity extends Activity{
 				/*
 				 * Llamamos a la función GPS con los datos recogidos.
 				 */
-				GPS(posicion);
+				MostrarResultados();
 	
 			}
-			/*if(resultCode == RESULT_CANCELED)
-			{
-				
-			}*/
 		}
 	}
 	
@@ -130,50 +129,22 @@ public class MainActivity extends Activity{
 	 * Función que recibe los datos del código QR e invoca a Google Maps con la
 	 * posicion correspondiente.
 	 */
-	public void GPS(String posicion)
+	public void MostrarResultados()
 	{
-		/*
-		 * Dividimos el string a partir del caracter "_", por ejemplo:
-		 * "String posicion" contiene : LATITUD_37.19678168548899_LONGITUD_-3.62465459523194
-		 * Tras el 'split' division contendrá:
-		 * "String division = {LATITUD, 37.19678168548899, LONGITUD, -3.62465459523194)"
-		 * Seleccionamos las posiciones 1 y 3 del vector que contienen los valores reales.
-		 * (http://stackoverflow.com/questions/3481828/how-to-split-a-string-in-java)
-		 */
+		setContentView(R.layout.activity_main);
+
 		if(posicion.contains("LATITUD") && posicion.contains("LONGITUD"))
 		{
 			String[] division = posicion.split("_");
-			String latitud = division[1];
-			String longitud = division[3];
-			Log.d(DEBUG_TAG, latitud + longitud);
+
 			
-			/*
-			 * Declaramos un Uri con el que llamaremos a Google Maps mediante un Intent, que se compondrá
-			 * de latitud y longitud del punto leido.
-			 */
-			/*
-			 * Ver:
-			 * https://developer.android.com/guide/components/intents-common.html#Maps
-			 */
+			TextView display = (TextView) findViewById(R.id.displayLatitud);
 			
-			Uri coordenadas = Uri.parse("geo:0,0?q="+latitud+","+longitud+"?z="+1+"(Punto)");
+			display.setText(division[1]);
 			
-			/*
-			 * Declaramos un intent del tipo ACTION_VIEW.
-			 */
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			/*
-			 * Le pasamos como datos el Uri declarado antes. Al tener la "etiqueta" "geo:" lanzará
-			 * Google Maps autimaticamente.
-			 */
-			intent.setData(coordenadas);
-		
-			if(intent.resolveActivity(getPackageManager())!=null)
-				startActivity(intent);
-		}
-		else
-		{
-			throw new IllegalArgumentException("La cadena " + posicion + " no es un punto GPS válido.");
+			display = (TextView) findViewById(R.id.displayLongitud);
+			
+			display.setText(division[3]);
 		}
 	}
 }
