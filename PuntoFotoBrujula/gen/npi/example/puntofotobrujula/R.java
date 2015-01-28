@@ -16,6 +16,9 @@ public final class R {
         public static final int abc_slide_out_bottom=0x7f040004;
         public static final int abc_slide_out_top=0x7f040005;
     }
+    public static final class array {
+        public static final int puntosCardinales=0x7f0c0000;
+    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1623,7 +1626,10 @@ containing a value of this type.
         public static final int abc_textfield_search_activated_mtrl_alpha=0x7f020030;
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
-        public static final int ic_launcher=0x7f020033;
+        public static final int flecha_roja=0x7f020033;
+        public static final int flecha_verde=0x7f020034;
+        public static final int ic_launcher=0x7f020035;
+        public static final int im_windrose=0x7f020036;
     }
     public static final class id {
         public static final int action_bar=0x7f050031;
@@ -1642,6 +1648,7 @@ containing a value of this type.
         public static final int activity_chooser_view_content=0x7f050021;
         public static final int always=0x7f05000d;
         public static final int beginning=0x7f050012;
+        public static final int bt_buscar=0x7f050044;
         public static final int checkbox=0x7f050029;
         public static final int collapseActionView=0x7f05000f;
         public static final int decor_content_parent=0x7f05002f;
@@ -1658,6 +1665,8 @@ containing a value of this type.
         public static final int icon=0x7f050026;
         public static final int ifRoom=0x7f05000c;
         public static final int image=0x7f050023;
+        public static final int imagenBrujula=0x7f050040;
+        public static final int imagenFlecha=0x7f050041;
         public static final int listMode=0x7f050002;
         public static final int list_item=0x7f050025;
         public static final int middle=0x7f050013;
@@ -1681,10 +1690,13 @@ containing a value of this type.
         public static final int showCustom=0x7f050009;
         public static final int showHome=0x7f050006;
         public static final int showTitle=0x7f050008;
+        public static final int sp_puntos_cardinales=0x7f050043;
         public static final int split_action_bar=0x7f050019;
         public static final int submit_area=0x7f05003c;
         public static final int tabMode=0x7f050003;
         public static final int title=0x7f050027;
+        public static final int tv_info_seleccionado=0x7f05003f;
+        public static final int tv_puntos_cardinales=0x7f050042;
         public static final int up=0x7f050016;
         public static final int useLogo=0x7f050005;
         public static final int withText=0x7f05000e;
@@ -1739,8 +1751,9 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030014;
         public static final int abc_search_view=0x7f030015;
         public static final int abc_simple_dropdown_hint=0x7f030016;
-        public static final int activity_main=0x7f030017;
-        public static final int support_simple_spinner_dropdown_item=0x7f030018;
+        public static final int activity_actividad_brujula=0x7f030017;
+        public static final int activity_main=0x7f030018;
+        public static final int support_simple_spinner_dropdown_item=0x7f030019;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1800,7 +1813,14 @@ containing a value of this type.
          */
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
         public static final int app_name=0x7f0a0010;
-        public static final int hello_world=0x7f0a0011;
+        public static final int boton_buscar=0x7f0a0013;
+        public static final int descripcionBrujula=0x7f0a0018;
+        public static final int descripcionFlecha=0x7f0a0016;
+        public static final int info_puntos_cardinales=0x7f0a0011;
+        public static final int iv_brujula_info=0x7f0a0015;
+        public static final int puntos_cardinales_prompt=0x7f0a0012;
+        public static final int title_activity_actividad_brujula=0x7f0a0014;
+        public static final int tv_seleccionado=0x7f0a0017;
     }
     public static final class style {
         /** 
